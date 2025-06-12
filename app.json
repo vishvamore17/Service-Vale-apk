@@ -4,7 +4,7 @@
     "slug": "service_vale",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/applogo.svg",
+    "icon": "./assets/images/applogo.png",
     "scheme": "servicevale",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -13,7 +13,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/applogo.svg"
+        "foregroundImage": "./assets/images/adaptive-icon.png"
       },
       "edgeToEdgeEnabled": true,
       "package": "com.markwatson.service_vale",
@@ -37,14 +37,14 @@
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/applogo.svg"
+      "favicon": "./assets/images/applogo.png"
     },
     "plugins": [
       "expo-router",
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/applogo.svg",
+          "image": "./assets/images/applogo.png",
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
