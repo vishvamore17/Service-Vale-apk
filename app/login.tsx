@@ -70,7 +70,7 @@ const LoginScreen = () => {
             console.log('Deep link URL:', url);
             if (url.includes('cloud.appwrite.io/v1/recovery')) {
                 const params = new URLSearchParams(url.split('?')[1]);
-                if (params.get('package') === 'com.markwatson.service_vale') {
+                if (params.get('package') === 'com.vishva1793.service_vale') {
                     const userId = params.get('userId');
                     const secret = params.get('secret');
                     if (userId && secret) {
@@ -159,7 +159,7 @@ const LoginScreen = () => {
 
     const handleSendOTP = async () => {
         try {
-            const resetUrl = `https://cloud.appwrite.io/v1/recovery?package=com.markwatson.service_vale`;
+            const resetUrl = `https://cloud.appwrite.io/v1/recovery?package=com.vishva1793.service_vale`;
 
             await account.createRecovery(forgotEmail, resetUrl);
             Alert.alert('Email Sent', 'Check your email for reset instructions');

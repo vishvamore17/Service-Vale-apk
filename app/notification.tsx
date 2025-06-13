@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, Text, FlatList, TouchableOpacity, SafeAreaView, ScrollView, RefreshControl, Alert } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, SafeAreaView, ScrollView, RefreshControl, Alert, Platform } from 'react-native';
 import { MaterialIcons, Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { databases } from '../lib/appwrite';
@@ -7,17 +7,21 @@ import { Query } from 'appwrite';
 import * as Haptics from 'expo-haptics';
 import { Audio } from 'expo-av';
 import styles from '../constants/userapp/notification';
+import * as Device from 'expo-device';
+import * as Notifications from 'expo-notifications';
 
 const DATABASE_ID = '681c428b00159abb5e8b';
 const NOTIFICATIONS_COLLECTION = 'admin_id';
+const ADMIN_FCM_TOKENS_COLLECTION = '684ab57c002abb8810a6';
 
 const AdminNotificationPage = () => {
     const [notifications, setNotifications] = useState<any[]>([]);
     const [refreshing, setRefreshing] = useState(false);
     const [previousCount, setPreviousCount] = useState(0);
     const soundRef = useRef<Audio.Sound | null>(null);
+    const [expoPushToken, setExpoPushToken] = useState('');
 
-    useEffect(() => {
+      useEffect(() => {
         const loadSound = async () => {
             const { sound } = await Audio.Sound.createAsync(
                 require('../assets/sounds/notification.mp3')
@@ -31,6 +35,60 @@ const AdminNotificationPage = () => {
             }
         };
     }, []);
+
+
+        const registerForPushNotificationsAsync = async () => {
+        if (!Device.isDevice) return;
+
+        const { status: existingStatus } = await Notifications.getPermissionsAsync();
+        let finalStatus = existingStatus;
+        
+        if (existingStatus !== 'granted') {
+            const { status } = await Notifications.requestPermissionsAsync();
+            finalStatus = status;
+        }
+        
+        if (finalStatus !== 'granted') return;
+
+        const token = (await Notifications.getExpoPushTokenAsync()).data;
+        return token;
+    };
+
+    const saveFcmTokenToAppwrite = async (token: string) => {
+        try {
+            await databases.createDocument(
+                DATABASE_ID,
+                ADMIN_FCM_TOKENS_COLLECTION,
+                'unique()',
+                {
+                    token,
+                    deviceId: Device.modelName,
+                    platform: Platform.OS
+                }
+            );
+        } catch (error) {
+            console.error('Error saving FCM token:', error);
+        }
+    };
+
+    useEffect(() => {
+        registerForPushNotificationsAsync().then(token => {
+            if (token) {
+                setExpoPushToken(token);
+                saveFcmTokenToAppwrite(token);
+            }
+        });
+
+        // Handle notifications when app is in foreground
+        const subscription = Notifications.addNotificationReceivedListener(notification => {
+            fetchNotifications(); // Refresh when notification is received
+        });
+
+        return () => {
+            subscription.remove();
+        };
+    }, []);
+
 
     const fetchNotifications = async () => {
         try {
