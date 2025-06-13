@@ -1,0 +1,34 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Open index.html",
+            "file": "d:\\lock disk C\\Downloads\\pratik-main\\public\\index.html"
+        },
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Open login.html",
+            "file": "d:\\lock disk C\\Downloads\\pratik-main\\public\\login.html"
+        },
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Open register.html",
+            "file": "d:\\lock disk C\\Downloads\\pratik-main\\public\\register.html"
+        },
+        
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Open reset-password.html",
+            "file": "d:\\lock disk C\\Downloads\\pratik-main\\public\\reset-password.html"
+        }
+    ]
+}
